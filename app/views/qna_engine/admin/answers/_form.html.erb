@@ -1,0 +1,18 @@
+<div class="well">
+	<h3>질문 내용</h3>
+	<p><%= @question.title %></p>
+	<div>
+		<%= simple_format @question.body %>
+	</div>
+</div>
+
+<div class="answer_form_area well">
+	<h3>답변 하기</h3>
+  <%= simple_form_for [:admin, @question, @answer] do |f| %>
+    <%= f.input :body %>
+    <div>
+      <%= f.submit class: 'btn btn-primary' %>
+      <%= link_to '취소', [:admin, @question], class: 'btn' %>
+    </div>
+  <% end %>
+</div>

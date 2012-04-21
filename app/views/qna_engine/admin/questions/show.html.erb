@@ -28,4 +28,21 @@
               :method => 'delete',
               :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
               :class => 'btn btn-danger' %>
+  <%= link_to '답변하기', [:new, :admin, @question, :answer], class: 'btn btn-info', style: 'float: right;' %>              
+</div>
+
+
+<div class="answer_list_area well">
+  <% @question.answers.each do |answer| %>
+    <div>
+      <h3>답변 내용</h3>
+      <div>
+        <%= simple_format answer.body %>
+        <p>
+          <span><%= link_to "수정", [:edit, :admin, @question, answer], class: 'btn btn-mini' %></span>
+          <span><%= link_to "삭제", [:admin, @question, answer], class: 'btn btn-mini btn-danger', confirm: '정말로 삭제하시겠습니까?', method: 'delete' %></span>
+        </p>
+      </div>
+    </div>
+  <% end %>
 </div>
