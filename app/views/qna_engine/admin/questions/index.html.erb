@@ -3,38 +3,30 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:secret) %></th>
       <th><%= model_class.human_attribute_name(:user_id) %></th>
       <th><%= model_class.human_attribute_name(:title) %></th>
-      <th><%= model_class.human_attribute_name(:body) %></th>
-      <th><%= model_class.human_attribute_name(:secret) %></th>
       <th><%= model_class.human_attribute_name(:created_at) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <% @questions.each do |question| %>
       <tr>
-        <td><%= link_to question.id, admin_question_path(question) %></td>
-        <td><%= question.user_id %></td>
-        <td><%= question.title %></td>
-        <td><%= question.body %></td>
         <td><%= question.secret %></td>
+        <td><%= link_to question.user.try(:nick_name), main_app.admin_user_path(question.user) %></td>
+        <td><%= link_to question.title, [:admin, question] %></td>
         <td><%=l question.created_at %></td>
         <td>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_admin_question_path(question), :class => 'btn btn-mini' %>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      admin_question_path(question),
-                      :method => :delete,
-                      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                      :class => 'btn btn-mini btn-danger' %>
+          <%= link_to '질문보기', [:admin, question], :class => 'btn btn-mini' %>
+          <%= link_to '답변하기', '#', :class => 'btn btn-mini btn-primary' %>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
+<!-- 
 <%= link_to t('.new', :default => t("helpers.links.new")),
             new_admin_question_path,
             :class => 'btn btn-primary' %>
+ -->

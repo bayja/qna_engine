@@ -9,6 +9,7 @@ class CreateQnaEngineQuestions < ActiveRecord::Migration
 
     create_table :qna_engine_questions do |t|
     	t.integer 	:user_id
+      t.integer   :category_id
     	t.string		:title
     	t.text			:body
     	t.boolean		:secret, :default => false

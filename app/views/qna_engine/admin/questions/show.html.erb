@@ -3,7 +3,7 @@
 
 <p>
   <strong><%= model_class.human_attribute_name(:user_id) %>:</strong><br>
-  <%= @question.user_id %>
+  <%= link_to @question.user.try(:nick_name), [:admin, @question.user] %>
 </p>
 <p>
   <strong><%= model_class.human_attribute_name(:title) %>:</strong><br>
@@ -11,7 +11,7 @@
 </p>
 <p>
   <strong><%= model_class.human_attribute_name(:body) %>:</strong><br>
-  <%= @question.body %>
+  <%= simple_format @question.body %>
 </p>
 <p>
   <strong><%= model_class.human_attribute_name(:secret) %>:</strong><br>
