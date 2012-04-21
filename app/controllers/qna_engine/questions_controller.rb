@@ -10,7 +10,7 @@ class QnaEngine::QuestionsController < ApplicationController
 
 	def index
 		@cates = QnaEngine::Category.order("position ASC").all
-		@questions = QnaEngine::Question.in_category_id(params[:category_id]).order("created_at DESC").page(params[:page]).per(20)
+		@questions = QnaEngine::Question.in_category_id(params[:category_id]).order("created_at DESC").page(params[:page]).per(10)
 	end
 
 	def show
