@@ -1,32 +1,106 @@
 <%- model_class = QnaEngine::Question.new.class -%>
 
 <div class="page-header">
-  <h2><%=t '.title', :default => model_class.model_name.human %></h2>
+  <h2 style="float: left;">질문/답변</h2>
+<%= link_to '질문 남기기',
+            new_question_path,
+            :class => 'btn btn-primary btn-large', :style => 'float: right; margin-right: 20px;' %>
+<div class="clear"></div>
 </div>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%= model_class.human_attribute_name(:user_id) %></th>
-      <th><%= model_class.human_attribute_name(:title) %></th>
-      <th><%= model_class.human_attribute_name(:body) %></th>
-      <th><%= model_class.human_attribute_name(:secret) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @questions.each do |question| %>
-      <tr>
-        <td><%= question.user_id %></td>
-        <td><%= question.title %></td>
-        <td><%= question.body %></td>
-        <td><%= question.secret %></td>
-        <td><%=l question.created_at %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
-<%= link_to '질문하기',
-            new_question_path,
-            :class => 'btn btn-primary' %>
+
+<ul class="nav nav-pills">
+  <% @cates.each_with_index do |cate, i| %>
+
+    <% if params[:category_id].blank? and i == 0 %>
+      <% active_class_val = 'active' %>
+    <% elsif params[:category_id] == cate.id.to_s %>
+      <% active_class_val = 'active' %>
+    <% else %>
+      <% active_class_val = '' %>
+    <% end %>
+
+    <li class="<%= active_class_val %>"><%= link_to cate.name, :category_id => cate.id %></li>
+  <% end %>
+</ul>
+
+<style>
+  .qna_box {
+    margin-bottom: 15px;
+  }
+
+  .accordion-heading {
+    overflow: hidden;
+  }
+  .question_body_wrap {
+    display: none;
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+
+  .toggle_q_body {
+    font-size: 12px;
+    text-decoration: underline;
+  }
+</style>
+
+<script type="text/javascript">
+  $(function() {
+    $('.toggle_q_body').click(function(e) {
+      e.preventDefault();
+      $(e.target).closest('.accordion-heading').find('.question_body_wrap').toggle(
+
+      );
+    });
+  });
+</script>
+
+<div class="accordion">
+  <% @questions.each_with_index do |question, i| %>
+    <div class='accordion-group qna_box'>
+      <div class="accordion-heading">
+        <div class='accordion-toggle'>
+          <span class="span7">
+            <%= question.title %> 
+            <% if question.authorized_to(current_user) %>
+              <%= link_to '질문보기', '#', class: 'toggle_q_body' %>
+            <% end %>
+          </span>
+
+          <% if owner_of?(question) %>
+            <span style="float: right;">
+              <%= link_to '수정', [:edit, question] %> 
+              <%= link_to '삭제', question, method: 'delete', confirm: '정말로 삭제하시겠습니까?' %>
+            </span>
+          <% end %>
+          <div class="clear"></div>
+
+          <% if question.authorized_to(current_user) %>
+            <div class="question_body_wrap well">
+              <%= simple_format question.body %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+
+      <div class="accordion-body">
+        <div class="accordion-inner">
+          <% if question.authorized_to(current_user) %>
+            <% if question.answers.last.present? %>
+              <%= simple_format question.answers.last.body %>          
+            <% else %>
+              아직 답변이 등록되지 않았습니다.
+            <% end %>
+          <% else %>
+            비밀글입니다.
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+  <% end %>
+</div>
+
+

@@ -9,7 +9,8 @@ class QnaEngine::QuestionsController < ApplicationController
 	end
 
 	def index
-		@questions = QnaEngine::Question.order("created_at DESC").page(params[:page]).per(20)
+		@cates = QnaEngine::Category.order("position ASC").all
+		@questions = QnaEngine::Question.in_category_id(params[:category_id]).order("created_at DESC").page(params[:page]).per(20)
 	end
 
 	def show
@@ -24,7 +25,7 @@ class QnaEngine::QuestionsController < ApplicationController
 		@question = QnaEngine::Question.new params[:question]
 		@question.user_id = current_user.id
 		if @question.save
-			redirect_to question_path(@question), notice: '질문을 등록했습니다.'
+			redirect_to questions_path(category_id: @question.category_id), notice: '질문을 등록했습니다.'
 		else
 			render :action => "new"
 		end
@@ -37,7 +38,7 @@ class QnaEngine::QuestionsController < ApplicationController
 	def update
 		@question = QnaEngine::Question.find params[:id]
 		if @question.update_attributes params[:question]
-			redirect_to @question, notice: '질문을 수정하였습니다.'
+			redirect_to questions_path(category_id: @question.category_id), notice: '질문을 수정하였습니다.'
 		else
 			render action: 'edit'
 		end

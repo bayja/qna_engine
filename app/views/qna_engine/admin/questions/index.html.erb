@@ -1,8 +1,9 @@
 <%- model_class = QnaEngine::Question.new.class -%>
-<h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+<h1><%=t '.title', :default => model_class.model_name.human %></h1>
 <table class="table table-striped">
   <thead>
     <tr>
+      <th>답변여부</th>
       <th><%= model_class.human_attribute_name(:secret) %></th>
       <th><%= model_class.human_attribute_name(:user_id) %></th>
       <th><%= model_class.human_attribute_name(:title) %></th>
@@ -13,13 +14,13 @@
   <tbody>
     <% @questions.each do |question| %>
       <tr>
+        <td><%= question.answers.present? %></td>
         <td><%= question.secret %></td>
         <td><%= link_to question.user.try(:nick_name), main_app.admin_user_path(question.user) %></td>
         <td><%= link_to question.title, [:admin, question] %></td>
         <td><%=l question.created_at %></td>
         <td>
           <%= link_to '질문보기', [:admin, question], :class => 'btn btn-mini' %>
-          <%= link_to '답변하기', '#', :class => 'btn btn-mini btn-primary' %>
         </td>
       </tr>
     <% end %>

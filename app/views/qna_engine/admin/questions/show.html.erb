@@ -10,6 +10,10 @@
   <%= @question.title %>
 </p>
 <p>
+  <strong><%= model_class.human_attribute_name(:secret) %>:</strong><br>
+  <%= @question.secret %>
+</p>
+<p>
   <strong><%= model_class.human_attribute_name(:body) %>:</strong><br>
   <%= simple_format @question.body %>
 </p>
@@ -44,5 +48,6 @@
         </p>
       </div>
     </div>
+    <hr>
   <% end %>
 </div>
